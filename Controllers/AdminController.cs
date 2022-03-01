@@ -37,9 +37,8 @@ namespace IndyBooks.Controllers
         public IActionResult CreateBook()
         {
             //TODO: Build a new CreateBookViewModel with a complete set of Writers from the database
-            
-
-            return View(); //TODO: pass the ViewModel onto the CreateBook View
+            CreateBookViewModel bookVM = new CreateBookViewModel { Writers = _db.Writers };
+            return View(bookVM); //TODO: pass the ViewModel onto the CreateBook View
         }
         [HttpPost]
         public IActionResult CreateBook(CreateBookViewModel bookVM)
