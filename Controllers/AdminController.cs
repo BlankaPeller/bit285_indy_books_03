@@ -23,9 +23,12 @@ namespace IndyBooks.Controllers
             IQueryable<Book> books = _db.Books.Include(b=>b.Author);
             //TODO: filter books by the id (if passed an id as its Route Parameter),
             //     otherwise use the entire collection of Books, ordered by SKU.
-            
-
-            return View("SearchResults", books);
+            if (id != 0) {
+                return View("SearchResults", books.Where(u => u.Id == id));
+            }
+            else {
+                return View("SearchResults", books);
+            }
         }
         /***
          * CREATE
