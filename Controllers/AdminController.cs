@@ -21,7 +21,7 @@ namespace IndyBooks.Controllers
         public IActionResult Index(long id)
         {
             IQueryable<Book> books = _db.Books.Include(b=>b.Author);
-            //TODO: filter books by the id (if passed an id as its Route Parameter),
+            // filter books by the id (if passed an id as its Route Parameter),
             //     otherwise use the entire collection of Books, ordered by SKU.
             if (id != 0) {
                 return View("SearchResults", books.Where(u => u.Id == id));
@@ -36,25 +36,26 @@ namespace IndyBooks.Controllers
         [HttpGet]
         public IActionResult CreateBook()
         {
-            //TODO: Build a new CreateBookViewModel with a complete set of Writers from the database
+            // Build a new CreateBookViewModel with a complete set of Writers from the database
             CreateBookViewModel bookVM = new CreateBookViewModel { Writers = _db.Writers };
-            return View(bookVM); //TODO: pass the ViewModel onto the CreateBook View
+            return View(bookVM); // pass the ViewModel onto the CreateBook View
         }
         [HttpPost]
         public IActionResult CreateBook(CreateBookViewModel bookVM)
         {
-            //TODO: Build the Writer object using the parameter
+            // Build the Writer object using the parameter
+            var author = new Writer { Name = bookVM.Name };
            
-            
+            // Build the Book using the parameter data and your newly created author.
+            var book = new Book { Author = author, Title = bookVM.Title, Price = bookVM.Price, SKU = bookVM.SKU };
 
-            //TODO: Build the Book using the parameter data and your newly created author.
+            // Add author and book to their DbSets; SaveChanges
+            _db.Add(author);
+            _db.Add(book);
+            _db.SaveChanges();
 
-
-            //TODO: Add author and book to their DbSets; SaveChanges
-           
-
-            //TODO: Show the book by passing the Book's id (rather than 1) to the Index Action 
-            return RedirectToAction("Index", new { id = 1 });
+            // Show the book by passing the Book's id (rather than 1) to the Index Action 
+            return RedirectToAction("Index", new { id = book.Id });
         }
         /***
          * UPDATE (reusing the CreateBook View ) 
