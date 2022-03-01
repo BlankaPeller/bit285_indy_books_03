@@ -70,8 +70,10 @@ namespace IndyBooks.Controllers
         [HttpGet]
         public IActionResult DeleteBook(long id)
         {
-            //TODO: Remove the Book associated with the given id number; Save Changes
-
+            // Remove the Book associated with the given id number; Save Changes
+            var book = new Book { Id = id };
+            _db.Remove(book);
+            _db.SaveChanges();
 
             return RedirectToAction("Index");
         }
